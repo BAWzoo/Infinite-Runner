@@ -38,6 +38,12 @@ public class PlayerController : MonoBehaviour
 
     private Rigidbody2D rb;
 
+    public int Health = 3;
+
+    private void OnTriggerEnter2D(Collider2D other) {
+        Health -= 1;
+    }
+
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
@@ -82,6 +88,10 @@ public class PlayerController : MonoBehaviour
         {
             CreateDust();
             rb.velocity = Vector2.up * jumpForce;
+        }
+
+        if (Health <= 0) {
+            Application.LoadLevel(Application.loadedLevel);
         }
     }
 
