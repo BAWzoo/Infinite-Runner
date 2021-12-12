@@ -40,6 +40,12 @@ public class PlayerController : MonoBehaviour
 
     public int Health = 3;
 
+    public bool isDashing;
+
+    public float mx;
+
+    public float dashDistance = 100f;
+
     private void OnTriggerEnter2D(Collider2D other) {
         Health -= 1;
     }
@@ -68,6 +74,7 @@ public class PlayerController : MonoBehaviour
             Flip();
         }
 
+
     }
 
     // Update that is called 1 time per Frame
@@ -93,6 +100,17 @@ public class PlayerController : MonoBehaviour
         if (Health <= 0) {
             Application.LoadLevel(Application.loadedLevel);
         }
+
+        if (Input.GetKeyDown(KeyCode.LeftShift)) {
+            if (moveInput > 0) {
+                StartCoroutine(Dash(1f));
+            }
+
+            else {
+                StartCoroutine(Dash(-1f));
+            }
+        }
+
     }
 
     void Flip()
@@ -108,6 +126,17 @@ public class PlayerController : MonoBehaviour
     void CreateDust()
     {
         dust.Play();
+    }
+
+    IEnumerator Dash (float direction) {
+        isDashing = true;
+        rb.velocity = new Vector2(rb.velocity.x, 0f);
+        rb.AddForce(new Vector2(dashDistance * direction, 0f), ForceMode2D.Impulse);
+        float gravity = rb.gravityScale;
+        rb.gravityScale = 0;
+        yield return new WaitForSeconds(0.4f);
+        isDashing = false;
+        rb.gravityScale = gravity;
     }
 
 }
