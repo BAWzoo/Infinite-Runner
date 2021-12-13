@@ -64,15 +64,9 @@ public class PlayerController : MonoBehaviour
 
 
         moveInput = Input.GetAxis("Horizontal");
-        rb.velocity = new Vector2(moveInput * speed, rb.velocity.y);
-
-        if (!facingRight && moveInput > 0)
+        if(Mathf.Abs(rb.velocity.x) <= Mathf.Abs(moveInput * speed))
         {
-            Flip();
-        }
-        else if (facingRight && moveInput < 0)
-        {
-            Flip();
+            rb.velocity = new Vector2(moveInput * speed, rb.velocity.y);
         }
 
 
@@ -84,6 +78,15 @@ public class PlayerController : MonoBehaviour
         if (isGrounded)
         {
             extraJumps = extraJumpsValue;
+        }
+
+        if (Input.GetKey(KeyCode.LeftShift))
+        {
+            moveInput = Input.GetAxis("Horizontal");
+            rb.velocity = new Vector2(moveInput * speed * 2, rb.velocity.y);
+            CreateDust();
+            
+            
         }
 
         if (Input.GetKeyDown(KeyCode.Space) && extraJumps > 0)
@@ -102,26 +105,13 @@ public class PlayerController : MonoBehaviour
             SceneManager.LoadScene("Tutorial");
         }
 
-        if (Input.GetKeyDown(KeyCode.LeftShift)) {
-            if (moveInput > 0) {
-                StartCoroutine(Dash(1f));
-            }
-
-            else {
-                StartCoroutine(Dash(-1f));
-            }
-        }
+        
 
     }
 
     void Flip()
     {
-        facingRight = !facingRight;
-        CreateDust();
-        // Commented out because rock doesn't need to switch directions with sprite
-        //Vector3 Scaler = transform.localScale;
-        //Scaler.x *= -1;
-        //transform.localScale = Scaler;
+        
     }
 
     void CreateDust()
@@ -129,15 +119,5 @@ public class PlayerController : MonoBehaviour
         dust.Play();
     }
 
-    IEnumerator Dash (float direction) {
-        isDashing = true;
-        rb.velocity = new Vector2(rb.velocity.x, 0f);
-        rb.AddForce(new Vector2(dashDistance * direction, 0f), ForceMode2D.Impulse);
-        float gravity = rb.gravityScale;
-        rb.gravityScale = 0;
-        yield return new WaitForSeconds(0.4f);
-        isDashing = false;
-        rb.gravityScale = gravity;
-    }
 
 }
