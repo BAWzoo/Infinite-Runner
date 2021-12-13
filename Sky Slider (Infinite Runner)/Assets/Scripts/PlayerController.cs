@@ -99,7 +99,7 @@ public class PlayerController : MonoBehaviour
         }
 
         if (Health <= 0) {
-            SceneManager.LoadScene("Main");
+            SceneManager.LoadScene("Tutorial");
         }
 
         if (Input.GetKeyDown(KeyCode.LeftShift)) {
