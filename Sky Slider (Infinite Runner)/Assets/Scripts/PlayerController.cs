@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class PlayerController : MonoBehaviour
 {
@@ -38,6 +39,18 @@ public class PlayerController : MonoBehaviour
 
     private Rigidbody2D rb;
 
+    public int Health = 3;
+
+    public bool isDashing;
+
+    public float mx;
+
+    public float dashDistance = 100f;
+
+    private void OnTriggerEnter2D(Collider2D other) {
+        Health -= 1;
+    }
+
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
@@ -62,6 +75,7 @@ public class PlayerController : MonoBehaviour
             Flip();
         }
 
+
     }
 
     // Update that is called 1 time per Frame
@@ -83,6 +97,21 @@ public class PlayerController : MonoBehaviour
             CreateDust();
             rb.velocity = Vector2.up * jumpForce;
         }
+
+        if (Health <= 0) {
+            SceneManager.LoadScene("Tutorial");
+        }
+
+        if (Input.GetKeyDown(KeyCode.LeftShift)) {
+            if (moveInput > 0) {
+                StartCoroutine(Dash(1f));
+            }
+
+            else {
+                StartCoroutine(Dash(-1f));
+            }
+        }
+
     }
 
     void Flip()
@@ -98,6 +127,17 @@ public class PlayerController : MonoBehaviour
     void CreateDust()
     {
         dust.Play();
+    }
+
+    IEnumerator Dash (float direction) {
+        isDashing = true;
+        rb.velocity = new Vector2(rb.velocity.x, 0f);
+        rb.AddForce(new Vector2(dashDistance * direction, 0f), ForceMode2D.Impulse);
+        float gravity = rb.gravityScale;
+        rb.gravityScale = 0;
+        yield return new WaitForSeconds(0.4f);
+        isDashing = false;
+        rb.gravityScale = gravity;
     }
 
 }
