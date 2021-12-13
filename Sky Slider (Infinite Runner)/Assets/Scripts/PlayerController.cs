@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class PlayerController : MonoBehaviour
 {
@@ -98,7 +99,7 @@ public class PlayerController : MonoBehaviour
         }
 
         if (Health <= 0) {
-            Application.LoadLevel(Application.loadedLevel);
+            SceneManager.LoadScene("Main");
         }
 
         if (Input.GetKeyDown(KeyCode.LeftShift)) {
