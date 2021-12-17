@@ -11,6 +11,8 @@ public class PlayerController : MonoBehaviour
     // Y Velocity
     public float jumpForce;
 
+    public float sprintSpeed;
+
     // Current velocity of player
     private float moveInput;
 
@@ -41,11 +43,9 @@ public class PlayerController : MonoBehaviour
 
     public int Health = 3;
 
-    public bool isDashing;
-
     public float mx;
 
-    public float dashDistance = 100f;
+    private bool isSprinting = false;
 
     private void OnTriggerEnter2D(Collider2D other) {
         Health -= 1;
@@ -64,7 +64,7 @@ public class PlayerController : MonoBehaviour
 
 
         moveInput = Input.GetAxis("Horizontal");
-        if(Mathf.Abs(rb.velocity.x) <= Mathf.Abs(moveInput * speed))
+        if(!isSprinting)
         {
             rb.velocity = new Vector2(moveInput * speed, rb.velocity.y);
         }
@@ -82,11 +82,17 @@ public class PlayerController : MonoBehaviour
 
         if (Input.GetKey(KeyCode.LeftShift))
         {
-            moveInput = Input.GetAxis("Horizontal");
-            rb.velocity = new Vector2(moveInput * speed * 2, rb.velocity.y);
             CreateDust();
+            isSprinting = true;
+            moveInput = Input.GetAxis("Horizontal");
+            rb.velocity = new Vector2(moveInput * speed * sprintSpeed, rb.velocity.y);
             
-            
+
+
+        }
+        else 
+        {
+            isSprinting = false;
         }
 
         if (Input.GetKeyDown(KeyCode.Space) && extraJumps > 0)

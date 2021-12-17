@@ -298,6 +298,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   speed: 4
   jumpForce: 6
+  sprintSpeed: 1.5
   groundCheck: {fileID: 427986678}
   checkRadius: 0.5
   whatIsGround:
@@ -306,9 +307,7 @@ MonoBehaviour:
   extraJumpsValue: 1
   dust: {fileID: 1689383817}
   Health: 3
-  isDashing: 0
   mx: 0
-  dashDistance: 100
 --- !u!50 &377048906
 Rigidbody2D:
   serializedVersion: 4
