@@ -41,15 +41,10 @@ public class PlayerController : MonoBehaviour
 
     private Rigidbody2D rb;
 
-    public int Health = 3;
-
     public float mx;
 
     private bool isSprinting = false;
 
-    private void OnTriggerEnter2D(Collider2D other) {
-        Health -= 1;
-    }
 
     void Start()
     {
@@ -105,10 +100,6 @@ public class PlayerController : MonoBehaviour
         {
             CreateDust();
             rb.velocity = Vector2.up * jumpForce;
-        }
-
-        if (Health <= 0) {
-            SceneManager.LoadScene("Tutorial");
         }
 
         
