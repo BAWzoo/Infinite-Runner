@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class HealthController : MonoBehaviour
 {
@@ -18,6 +19,12 @@ public class HealthController : MonoBehaviour
     // Update is called once per frame
     public void UpdateHealth()
     {
+
+        if (playerHealth <= 0)
+        {
+           SceneManager.LoadScene("Tutorial");
+        }
+
         for (int i = 0; i < hearts.Length; i++)
         {
             if (i < playerHealth)

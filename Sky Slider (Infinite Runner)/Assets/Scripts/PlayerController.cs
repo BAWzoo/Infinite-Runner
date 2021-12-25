@@ -45,6 +45,13 @@ public class PlayerController : MonoBehaviour
 
     private bool isSprinting = false;
 
+    [SerializeField] private HealthController _healthController;
+
+    public AudioSource source;
+    public AudioClip clip;
+
+    private bool isPlaying = false;
+
 
     void Start()
     {
@@ -70,6 +77,18 @@ public class PlayerController : MonoBehaviour
     // Update that is called 1 time per Frame
     void Update()
     {
+        if (_healthController.playerHealth <= 1 && !isPlaying)
+        {
+            source.clip = clip;
+            source.Play();
+            isPlaying = true;
+        }
+
+        if (_healthController.playerHealth >= 2)
+        {
+            isPlaying = false;
+        }
+        
         if (isGrounded)
         {
             extraJumps = extraJumpsValue;
