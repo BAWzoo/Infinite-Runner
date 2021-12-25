@@ -9,10 +9,14 @@ public class DamageController : MonoBehaviour
 
     [SerializeField] private HealthController _healthController;
 
+    public AudioSource source;
+    public AudioClip clip;
+
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if(collision.CompareTag("Player"))
         {
+            source.PlayOneShot(clip);
             Damage();
         }
 
