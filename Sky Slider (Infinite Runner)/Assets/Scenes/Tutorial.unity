@@ -3917,7 +3917,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8c3fcaa4e25df334ea8ea6eb50389609, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  healthRegen: 100
+  healthRegen: 1
   _healthController: {fileID: 1982262653}
   source: {fileID: 0}
   clip: {fileID: 0}

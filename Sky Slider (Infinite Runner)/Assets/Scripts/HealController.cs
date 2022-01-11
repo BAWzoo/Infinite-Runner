@@ -24,7 +24,17 @@ public class HealController : MonoBehaviour
 
     void Heal()
     {
-        _healthController.playerHealth = _healthController.playerHealth + healthRegen;
+        int new_health = _healthController.playerHealth + healthRegen;
+        if (new_health > _healthController.maxHealth) 
+        {
+            new_health = _healthController.maxHealth;
+        }
+        else if (new_health < 0)
+        {
+            new_health = 0;
+        }
+
+        _healthController.playerHealth = new_health;
         _healthController.UpdateHealth();
         gameObject.SetActive(false);
     }
