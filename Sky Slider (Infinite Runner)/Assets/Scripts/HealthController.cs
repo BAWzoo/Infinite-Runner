@@ -28,7 +28,7 @@ public class HealthController : MonoBehaviour
 
         if (playerHealth <= 0)
         {
-           SceneManager.LoadScene("Tutorial");
+            PlayerDied();
         }
 
         for (int i = 0; i < hearts.Length; i++)
@@ -39,5 +39,10 @@ public class HealthController : MonoBehaviour
             else
                 hearts[i].color = Color.black;
         }
+    }
+
+    private void PlayerDied()
+    {
+        ManagerOfLevel.instance.GameOver();
     }
 }
