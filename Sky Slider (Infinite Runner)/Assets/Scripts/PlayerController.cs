@@ -52,6 +52,8 @@ public class PlayerController : MonoBehaviour
 
     private bool isPlaying = false;
 
+    public Animator animator;
+
 
     void Start()
     {
@@ -63,9 +65,12 @@ public class PlayerController : MonoBehaviour
     {
 
         isGrounded = Physics2D.OverlapCircle(groundCheck.position, checkRadius, whatIsGround);
+        
+        moveInput = Input.GetAxisRaw("Horizontal");
 
+        float currentMoveSpeed = moveInput * speed;
 
-        moveInput = Input.GetAxis("Horizontal");
+        animator.SetFloat("Speed", Mathf.Abs(currentMoveSpeed));
         if(!isSprinting)
         {
             rb.velocity = new Vector2(moveInput * speed, rb.velocity.y);
