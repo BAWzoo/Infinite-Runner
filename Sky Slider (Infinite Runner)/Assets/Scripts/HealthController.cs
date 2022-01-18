@@ -9,11 +9,17 @@ public class HealthController : MonoBehaviour
 
     public int playerHealth;
 
+    public int maxHealth;
+
     [SerializeField] private Image[] hearts;
     // Start is called before the first frame update
     public void Start()
     {
         UpdateHealth();
+    }
+
+    public bool isDamaged() {
+        return playerHealth < maxHealth;
     }
 
     // Update is called once per frame
