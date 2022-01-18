@@ -71,6 +71,14 @@ public class PlayerController : MonoBehaviour
         float currentMoveSpeed = moveInput * speed;
 
         animator.SetFloat("Speed", Mathf.Abs(currentMoveSpeed));
+        if (currentMoveSpeed < 0)
+        {
+            GetComponent<SpriteRenderer>().flipX = true;
+        }
+        else if (currentMoveSpeed > 0)
+        {
+            GetComponent<SpriteRenderer>().flipX = false;
+        }
         if(!isSprinting)
         {
             rb.velocity = new Vector2(moveInput * speed, rb.velocity.y);
