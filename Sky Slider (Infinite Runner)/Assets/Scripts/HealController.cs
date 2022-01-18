@@ -11,11 +11,18 @@ public class HealController : MonoBehaviour
 
     public AudioSource source;
     public AudioClip clip;
+    private bool isHit = false;
+
+    void Start()
+    {
+        isHit = false;
+    }
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if(collision.CompareTag("Player") && _healthController.isDamaged())
+        if(collision.CompareTag("Player") && _healthController.isDamaged() && !isHit)
         {
+            isHit = true;
             //source.PlayOneShot(clip);
             Heal();
         }
