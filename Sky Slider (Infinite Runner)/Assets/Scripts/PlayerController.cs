@@ -54,6 +54,8 @@ public class PlayerController : MonoBehaviour
 
     public Animator animator;
 
+    public bool isDead = false;
+
 
     void Start()
     {
@@ -63,6 +65,10 @@ public class PlayerController : MonoBehaviour
     // Update is called for Physics based actions
     void FixedUpdate()
     {
+
+        if (isDead) {
+            return;
+        }
 
         isGrounded = Physics2D.OverlapCircle(groundCheck.position, checkRadius, whatIsGround);
         
@@ -90,6 +96,15 @@ public class PlayerController : MonoBehaviour
     // Update that is called 1 time per Frame
     void Update()
     {
+
+        if (isDead) {
+            if (isPlaying) {
+            isPlaying = false;
+            source.Stop();
+            }
+            return;
+        }
+
         if (_healthController.playerHealth <= 1 && !isPlaying)
         {
             source.clip = clip;
@@ -100,6 +115,7 @@ public class PlayerController : MonoBehaviour
         if (_healthController.playerHealth >= 2)
         {
             isPlaying = false;
+            source.Stop();
         }
         
         if (isGrounded)

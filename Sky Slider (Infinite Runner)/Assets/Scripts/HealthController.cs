@@ -11,6 +11,8 @@ public class HealthController : MonoBehaviour
 
     public int maxHealth;
 
+    public GameOverScreen GameOverScreen;
+
     [SerializeField] private Image[] hearts;
     // Start is called before the first frame update
     public void Start()
@@ -43,6 +45,7 @@ public class HealthController : MonoBehaviour
 
     private void PlayerDied()
     {
-        ManagerOfLevel.instance.GameOver();
+        GameOverScreen.Setup();
+        //SceneManager.LoadScene("Tutorial");
     }
 }
