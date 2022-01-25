@@ -197,13 +197,13 @@ public class RetroPixelCameraController : MonoBehaviour
         {
             //Ease in/out from current camera position towards focus destination
             cameraPositionX = Mathf.SmoothStep(cameraPositionX, focusDestinationX, cameraMoveSpeedDelta);
-            cameraPositionY = Mathf.SmoothStep(cameraPositionY, focusDestinationY + 3, cameraMoveSpeedDelta);
+            cameraPositionY = Mathf.SmoothStep(cameraPositionY, focusDestinationY + 2, cameraMoveSpeedDelta);
         }
         else
         {
             //Or move without easing
             cameraPositionX = Mathf.MoveTowards(cameraPositionX, focusDestinationX, cameraMoveSpeedDelta);
-            cameraPositionY = Mathf.MoveTowards(cameraPositionY, focusDestinationY + 3, cameraMoveSpeedDelta);
+            cameraPositionY = Mathf.MoveTowards(cameraPositionY, focusDestinationY + 2, cameraMoveSpeedDelta);
         }
 
         //Checks if camera should be bounded, and if so bounds it to the level's width and height
