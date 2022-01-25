@@ -4542,6 +4542,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   player: {fileID: 377048905}
+  txt: {fileID: 1409306270}
   source: {fileID: 2029079088}
   clip: {fileID: 8300000, guid: b75c7b9f58c014d4492f0a2a21d46b30, type: 3}
 --- !u!1 &1129750121
