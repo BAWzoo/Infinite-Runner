@@ -546,6 +546,7 @@ MonoBehaviour:
   clip: {fileID: 8300000, guid: ccbf5605a14796948bf83284505b5164, type: 3}
   animator: {fileID: 377048908}
   isDead: 0
+  player: {fileID: 111063579}
 --- !u!50 &377048906
 Rigidbody2D:
   serializedVersion: 4

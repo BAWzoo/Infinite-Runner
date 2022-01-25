@@ -56,6 +56,8 @@ public class PlayerController : MonoBehaviour
 
     public bool isDead = false;
 
+    public Transform player;
+
 
     void Start()
     {
@@ -90,6 +92,10 @@ public class PlayerController : MonoBehaviour
             rb.velocity = new Vector2(moveInput * speed, rb.velocity.y);
         }
 
+        if (player.transform.position.y < -35) {
+            _healthController.playerHealth = 0;
+            _healthController.UpdateHealth();
+        }
 
     }
 
