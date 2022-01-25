@@ -92,11 +92,6 @@ public class PlayerController : MonoBehaviour
             rb.velocity = new Vector2(moveInput * speed, rb.velocity.y);
         }
 
-        if (player.transform.position.y < -35) {
-            _healthController.playerHealth = 0;
-            _healthController.UpdateHealth();
-        }
-
     }
 
     // Update that is called 1 time per Frame
@@ -110,6 +105,12 @@ public class PlayerController : MonoBehaviour
             }
             return;
         }
+
+        if (player.transform.position.y < -35) {
+            _healthController.playerHealth = 0;
+            _healthController.UpdateHealth();
+        }
+
 
         if (_healthController.playerHealth <= 1 && !isPlaying)
         {
