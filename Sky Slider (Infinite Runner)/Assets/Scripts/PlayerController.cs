@@ -17,7 +17,7 @@ public class PlayerController : MonoBehaviour
     private float moveInput;
 
     // Boolean Of if Facing Right
-    private bool facingRight = true;
+    //private bool facingRight = true;
 
     // Boolean of if player is on ground
     private bool isGrounded;
@@ -59,6 +59,19 @@ public class PlayerController : MonoBehaviour
     public Transform player;
 
 
+    private bool isDashing;
+    public float dashTime;
+    public float dashSpeed;
+    public float distanceBetweenImages;
+    public float dashCoolDown;
+    private float dashTimeLeft;
+    private float lastImageXpos;
+    private float lastDash = -100f;
+
+    private int direction;
+
+
+
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
@@ -82,10 +95,12 @@ public class PlayerController : MonoBehaviour
         if (currentMoveSpeed < 0)
         {
             GetComponent<SpriteRenderer>().flipX = true;
+            direction = -1;
         }
         else if (currentMoveSpeed > 0)
         {
             GetComponent<SpriteRenderer>().flipX = false;
+            direction = 1;
         }
         if(!isSprinting)
         {
@@ -136,9 +151,6 @@ public class PlayerController : MonoBehaviour
             isSprinting = true;
             moveInput = Input.GetAxis("Horizontal");
             rb.velocity = new Vector2(moveInput * speed * sprintSpeed, rb.velocity.y);
-            
-
-
         }
         else 
         {
@@ -157,8 +169,47 @@ public class PlayerController : MonoBehaviour
             rb.velocity = Vector2.up * jumpForce;
         }
 
+
+        if (Input.GetKeyDown(KeyCode.F)) {
+            if (Time.time >= lastDash + dashCoolDown) {
+                AttemptToDash();
+            }
+        }
+
+        CheckDash();
         
 
+    }
+
+    private void AttemptToDash() {
+        isDashing = true;
+        dashTimeLeft = dashTime;
+        lastDash = Time.time;
+
+        PlayerAfterImagePool.Instance.GetFromPool();
+        lastImageXpos = transform.position.x;
+    }
+
+    private void CheckDash() {
+        if (isDashing) {
+            if (dashTimeLeft > 0) {
+                //canMove = false;
+                //canFlip = false;
+                rb.velocity = new Vector2(dashSpeed * direction, rb.velocity.y);
+                dashTimeLeft -= Time.deltaTime;
+
+                if (Mathf.Abs(transform.position.x - lastImageXpos) > distanceBetweenImages) {
+                    PlayerAfterImagePool.Instance.GetFromPool();
+                    lastImageXpos = transform.position.x;
+                }
+            }
+        }
+
+        if (dashTimeLeft <= 0) { //|| isTouchingWall
+            isDashing = false;
+            //canMove = true;
+            //canFlip = true;
+        }
     }
 
     void Flip()
