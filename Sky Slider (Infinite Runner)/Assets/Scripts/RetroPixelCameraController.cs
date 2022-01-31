@@ -89,8 +89,8 @@ public class RetroPixelCameraController : MonoBehaviour
         mainCamera.orthographic = true;
         mainCamera.orthographicSize = (cameraPixelHeight) / (2 * tileSize);
         mainCamera.pixelRect.size.Set(cameraPixelWidth, cameraPixelHeight);
-        mainCamera.nearClipPlane = 0.3f;
-        mainCamera.farClipPlane = 1000f;
+        mainCamera.nearClipPlane = 0f;
+        mainCamera.farClipPlane = 50f;
         mainCamera.depth = -2;
         //Sets the build resolution of the display based on camera dimensions and scale factor
         //Note: You still have to manually set the display in the editor itself
