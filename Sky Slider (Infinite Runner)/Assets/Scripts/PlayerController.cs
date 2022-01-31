@@ -17,16 +17,34 @@ public class PlayerController : MonoBehaviour
     private float moveInput;
 
     // Boolean Of if Facing Right
-    //private bool facingRight = true;
+    private bool facingRight = true;
+
+    // What value to slow down by when in air and not actively moving
+    public float airDragMultiplier = 0.975f;
 
     // Boolean of if player is on ground
     private bool isGrounded;
 
+    // Boolean of if player is against wall
+    private bool isTouchingWall;
+
     // An empty object that is child of player and stays just below the sprite to check ground
     public Transform groundCheck;
 
+    // An empty object that is child of player and raycasts to wall to check if touching the wall
+    public Transform wallCheck;
+
     // Radius of a circle to check around
     public float checkRadius;
+
+    // Length of which to check for wall
+    public float wallCheckDistance;
+
+    // Bool of if it is wallsliding
+    private bool isWallSliding;
+
+    // Speed at which the player slides down the wall
+    public float WallSlideSpeed;
 
     // The player will only be able to jump off this layer, allows for collision with objects in future without being able to jump off them
     public LayerMask whatIsGround;
@@ -39,6 +57,7 @@ public class PlayerController : MonoBehaviour
 
     public ParticleSystem dust;
 
+    // Player Rigidbody
     private Rigidbody2D rb;
 
     public float mx;
@@ -52,12 +71,14 @@ public class PlayerController : MonoBehaviour
 
     private bool isPlaying = false;
 
+    // Animator for the player
     public Animator animator;
 
     public bool isDead = false;
 
     public Transform player;
 
+    private float currentMoveSpeed;
 
     private bool isDashing;
     public float dashTime;
@@ -80,38 +101,17 @@ public class PlayerController : MonoBehaviour
     // Update is called for Physics based actions
     void FixedUpdate()
     {
-
         if (isDead) {
             return;
         }
-
-        isGrounded = Physics2D.OverlapCircle(groundCheck.position, checkRadius, whatIsGround);
-        
-        moveInput = Input.GetAxisRaw("Horizontal");
-
-        float currentMoveSpeed = moveInput * speed;
-
-        animator.SetFloat("Speed", Mathf.Abs(currentMoveSpeed));
-        if (currentMoveSpeed < 0)
-        {
-            GetComponent<SpriteRenderer>().flipX = true;
-            direction = -1;
-        }
-        else if (currentMoveSpeed > 0)
-        {
-            GetComponent<SpriteRenderer>().flipX = false;
-            direction = 1;
-        }
-        if(!isSprinting)
-        {
-            rb.velocity = new Vector2(moveInput * speed, rb.velocity.y);
-        }
-
+        animatePlayer();
+        applyMovement();
     }
 
     // Update that is called 1 time per Frame
     void Update()
     {
+        checkIfWallSliding();
 
         if (isDead) {
             if (isPlaying) {
@@ -149,7 +149,7 @@ public class PlayerController : MonoBehaviour
         {
             CreateDust();
             isSprinting = true;
-            moveInput = Input.GetAxis("Horizontal");
+            moveInput = Input.GetAxisRaw("Horizontal");
             rb.velocity = new Vector2(moveInput * speed * sprintSpeed, rb.velocity.y);
         }
         else 
@@ -212,14 +212,80 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    void Flip()
+    void applyMovement()
     {
+        isGrounded = Physics2D.OverlapCircle(groundCheck.position, checkRadius, whatIsGround);
+
+        isTouchingWall = Physics2D.Raycast(wallCheck.position, transform.right, wallCheckDistance, whatIsGround);
+
+        moveInput = Input.GetAxisRaw("Horizontal");
+
+        currentMoveSpeed = moveInput * speed;
+
+        if (currentMoveSpeed < 0 && facingRight)
+        {
+            Flip(true);
+            direction = -1;
+        }
+        else if (currentMoveSpeed > 0 && !facingRight)
+        {
+            Flip(false);
+            direction = 1;
+        }
+        if (!isSprinting)
+        {
+            rb.velocity = new Vector2(moveInput * speed, rb.velocity.y);
+        }
+        if (!isGrounded && !isWallSliding && moveInput == 0)
+        {
+            rb.velocity = new Vector2(rb.velocity.x * airDragMultiplier, rb.velocity.y);
+        }
+
+        if (isWallSliding)
+        {
+            if (rb.velocity.y < -WallSlideSpeed)
+            {
+                rb.velocity = new Vector2(rb.velocity.x, -WallSlideSpeed);
+            }
+        }
+    }
+
+    // Flips the character in the direction of the velocity
+    void Flip(bool b)
+    {
+        if (!isWallSliding)
+        {
+            transform.Rotate(0.0f, 180.0f, 0.0f);
+            facingRight = !facingRight;
+        }
         
+    }
+
+    // Sets the parameters for the animator
+    void animatePlayer()
+    {
+        animator.SetFloat("Speed", Mathf.Abs(currentMoveSpeed));
+        animator.SetBool("isGrounded", isGrounded);
+        animator.SetFloat("yVelocity", rb.velocity.y);
+        animator.SetBool("isWallSliding", isWallSliding);
     }
 
     void CreateDust()
     {
         dust.Play();
+    }
+
+    void checkIfWallSliding()
+    {
+        if (isTouchingWall && isGrounded && rb.velocity.y < 0)
+        {
+            isWallSliding = true;
+
+        }
+        else
+        {
+            isWallSliding = false;
+        }
     }
 
 
