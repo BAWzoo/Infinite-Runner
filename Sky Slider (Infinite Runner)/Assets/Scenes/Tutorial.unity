@@ -530,9 +530,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 35db7cf9c2369ba40af7921564023b97, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 5
+  speed: 7
   jumpForce: 7.5
-  sprintSpeed: 1.5
   airDragMultiplier: 0.975
   groundCheck: {fileID: 427986678}
   wallCheck: {fileID: 759341618}
@@ -551,10 +550,10 @@ MonoBehaviour:
   animator: {fileID: 377048908}
   isDead: 0
   player: {fileID: 111063579}
-  dashTime: 0.2
-  dashSpeed: 15
+  dashTime: 5
+  dashSpeed: 24
   distanceBetweenImages: 0.1
-  dashCoolDown: 2
+  dashCoolDown: 1
 --- !u!50 &377048906
 Rigidbody2D:
   serializedVersion: 4

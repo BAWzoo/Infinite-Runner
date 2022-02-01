@@ -11,7 +11,7 @@ public class PlayerController : MonoBehaviour
     // Y Velocity
     public float jumpForce;
 
-    public float sprintSpeed;
+    // public float sprintSpeed;
 
     // Current velocity of player
     private float moveInput;
@@ -62,7 +62,7 @@ public class PlayerController : MonoBehaviour
 
     public float mx;
 
-    private bool isSprinting = false;
+    // private bool isSprinting = false;
 
     [SerializeField] private HealthController _healthController;
 
@@ -149,22 +149,22 @@ public class PlayerController : MonoBehaviour
             extraJumps = extraJumpsValue;
         }
 
-        if (Input.GetButton("Sprint") || Input.GetAxis("Sprint") > 0) {
-            isSprint = !isSprint;
-        }
-        if (isSprint)
-        {
-            CreateDust();
-            isSprinting = true;
-            moveInput = Input.GetAxisRaw("Horizontal");
-            rb.velocity = new Vector2(moveInput * speed * sprintSpeed, rb.velocity.y);
-            isSprint = !isSprint;
-        }
+        //if (Input.GetButton("Sprint") || Input.GetAxis("Sprint") > 0) {
+        //    isSprint = !isSprint;
+        //}
+        //if (isSprint)
+        //{
+        //    CreateDust();
+        //    isSprinting = true;
+        //    moveInput = Input.GetAxisRaw("Horizontal");
+        //    rb.velocity = new Vector2(moveInput * speed * sprintSpeed, rb.velocity.y);
+        //    isSprint = !isSprint;
+        //}
 
-        else 
-        {
-            isSprinting = false;
-        }
+        //else 
+        //{
+        //    isSprinting = false;
+        //}
 
         if (Input.GetButtonDown("Jump") && extraJumps == 0 && isGrounded) {
             isJump = !isJump;
@@ -191,7 +191,7 @@ public class PlayerController : MonoBehaviour
         }
 
 
-        if (isDash) {
+        if (Input.GetButtonDown("Dash")) {
             if (Time.time >= lastDash + dashCoolDown) {
                 AttemptToDash();
             }
@@ -217,9 +217,9 @@ public class PlayerController : MonoBehaviour
             if (dashTimeLeft > 0) {
                 //canMove = false;
                 //canFlip = false;
-                rb.velocity = new Vector2(dashSpeed * direction, 0);
+                rb.velocity = new Vector2((speed + dashSpeed) * direction, 0);
+                Debug.Log(rb.velocity.x);
                 dashTimeLeft -= Time.deltaTime;
-
                 if (Mathf.Abs(transform.position.x - lastImageXpos) > distanceBetweenImages) {
                     PlayerAfterImagePool.Instance.GetFromPool();
                     lastImageXpos = transform.position.x;
@@ -254,10 +254,12 @@ public class PlayerController : MonoBehaviour
             Flip(false);
             direction = 1;
         }
-        if (!isSprinting)
+        
+        if (!isDash)
         {
             rb.velocity = new Vector2(moveInput * speed, rb.velocity.y);
         }
+
         if (!isGrounded && !isWallSliding && moveInput == 0)
         {
             rb.velocity = new Vector2(rb.velocity.x * airDragMultiplier, rb.velocity.y);
