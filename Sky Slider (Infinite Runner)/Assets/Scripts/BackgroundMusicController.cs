@@ -26,6 +26,7 @@ public class BackgroundMusicController : MonoBehaviour
             source.clip = clip;
             source.volume = 0.3F;
             source.Play();
+            source.loop = true;
             isPlaying = true;
         }
     }

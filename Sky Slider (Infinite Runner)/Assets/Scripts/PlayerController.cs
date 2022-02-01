@@ -91,6 +91,10 @@ public class PlayerController : MonoBehaviour
 
     private int direction;
 
+    private bool isJump = false;
+    private bool isSprint = false;
+    private bool isDash = false;
+
 
 
     void Start()
@@ -145,35 +149,53 @@ public class PlayerController : MonoBehaviour
             extraJumps = extraJumpsValue;
         }
 
-        if (Input.GetKey(KeyCode.LeftShift))
+        if (Input.GetButton("Sprint") || Input.GetAxis("Sprint") > 0) {
+            isSprint = !isSprint;
+        }
+        if (isSprint)
         {
             CreateDust();
             isSprinting = true;
             moveInput = Input.GetAxisRaw("Horizontal");
             rb.velocity = new Vector2(moveInput * speed * sprintSpeed, rb.velocity.y);
+            isSprint = !isSprint;
         }
+
         else 
         {
             isSprinting = false;
         }
 
-        if (Input.GetKeyDown(KeyCode.Space) && extraJumps > 0)
+        if (Input.GetButtonDown("Jump") && extraJumps == 0 && isGrounded) {
+            isJump = !isJump;
+        }
+
+        // if (isJump)
+        // {
+        //     CreateDust();
+        //     rb.velocity = Vector2.up * jumpForce;
+        //     extraJumps--;
+        // }
+
+        
+
+        if (isJump)
         {
             CreateDust();
             rb.velocity = Vector2.up * jumpForce;
-            extraJumps--;
+            isJump = false;
         }
-        else if (Input.GetKeyDown(KeyCode.Space) && extraJumps == 0 && isGrounded)
-        {
-            CreateDust();
-            rb.velocity = Vector2.up * jumpForce;
+
+        if (Input.GetButtonDown("Dash")) {
+            isDash = !isDash;
         }
 
 
-        if (Input.GetKeyDown(KeyCode.F)) {
+        if (isDash) {
             if (Time.time >= lastDash + dashCoolDown) {
                 AttemptToDash();
             }
+            isDash = !isDash;
         }
 
         CheckDash();
