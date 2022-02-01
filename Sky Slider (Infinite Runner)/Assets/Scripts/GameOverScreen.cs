@@ -23,7 +23,7 @@ public class GameOverScreen : MonoBehaviour
 
         int randnum = UnityEngine.Random.Range(0, insults.Length);
         txt.text = insults[randnum];
-
+        source.Stop();
         source.clip = clip;
         source.volume = 0.3F;
         source.Play();
