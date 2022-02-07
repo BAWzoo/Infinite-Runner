@@ -86,7 +86,6 @@ public class PlayerController : MonoBehaviour
     public float distanceBetweenImages;
     public float dashCoolDown;
     private float dashTimeLeft;
-    private float lastImageXpos;
     private float lastDash = -100f;
 
     private int direction;
@@ -186,9 +185,6 @@ public class PlayerController : MonoBehaviour
             isJump = false;
         }
 
-        if (Input.GetButtonDown("Dash")) {
-            isDash = !isDash;
-        }
 
 
         if (Input.GetButtonDown("Dash")) {
@@ -207,9 +203,6 @@ public class PlayerController : MonoBehaviour
         isDashing = true;
         dashTimeLeft = dashTime;
         lastDash = Time.time;
-
-        PlayerAfterImagePool.Instance.GetFromPool();
-        lastImageXpos = transform.position.x;
     }
 
     private void CheckDash() {
@@ -217,13 +210,10 @@ public class PlayerController : MonoBehaviour
             if (dashTimeLeft > 0) {
                 //canMove = false;
                 //canFlip = false;
-                rb.velocity = new Vector2((speed + dashSpeed) * direction, 0);
+                //rb.velocity = new Vector2((speed + dashSpeed) * direction, 0);
+                rb.AddForce(new Vector2(dashSpeed, 0f), ForceMode2D.Force);
                 Debug.Log(rb.velocity.x);
                 dashTimeLeft -= Time.deltaTime;
-                if (Mathf.Abs(transform.position.x - lastImageXpos) > distanceBetweenImages) {
-                    PlayerAfterImagePool.Instance.GetFromPool();
-                    lastImageXpos = transform.position.x;
-                }
             }
         }
 
@@ -255,10 +245,8 @@ public class PlayerController : MonoBehaviour
             direction = 1;
         }
         
-        if (!isDash)
-        {
-            rb.velocity = new Vector2(moveInput * speed, rb.velocity.y);
-        }
+        rb.velocity = new Vector2(moveInput * speed, rb.velocity.y);
+
 
         if (!isGrounded && !isWallSliding && moveInput == 0)
         {
