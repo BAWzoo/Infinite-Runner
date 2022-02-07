@@ -83,7 +83,6 @@ public class PlayerController : MonoBehaviour
     private bool isDashing;
     public float dashTime;
     public float dashSpeed;
-    public float distanceBetweenImages;
     public float dashCoolDown;
     private float dashTimeLeft;
     private float lastDash = -100f;
@@ -185,16 +184,38 @@ public class PlayerController : MonoBehaviour
             isJump = false;
         }
 
-
-
         if (Input.GetButtonDown("Dash")) {
-            if (Time.time >= lastDash + dashCoolDown) {
-                AttemptToDash();
-            }
             isDash = !isDash;
         }
 
-        CheckDash();
+        
+
+        if (isDash) {
+            //AttemptToDash();
+            //rb.AddForce(new Vector2(dashSpeed, 0f), ForceMode2D.Impulse);
+            rb.velocity = Vector2.zero;
+            isDashing = true;
+            dashTimeLeft = dashTime;
+            isDash = !isDash;
+        }
+
+        if (isDashing) {
+            rb.velocity = new Vector2(speed * dashSpeed * direction, 0);
+
+            dashTimeLeft -= Time.deltaTime;
+
+            if (dashTimeLeft <= 0) {
+                isDashing = false;
+            }
+
+            
+
+
+
+
+        }
+
+        //CheckDash();
         
 
     }
@@ -245,7 +266,9 @@ public class PlayerController : MonoBehaviour
             direction = 1;
         }
         
-        rb.velocity = new Vector2(moveInput * speed, rb.velocity.y);
+        if (!isDashing) {
+            rb.velocity = new Vector2(moveInput * speed, rb.velocity.y);
+        }
 
 
         if (!isGrounded && !isWallSliding && moveInput == 0)
