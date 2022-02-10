@@ -85,7 +85,7 @@ public class PlayerController : MonoBehaviour
     public float dashSpeed;
     public float dashCoolDown;
     private float dashTimeLeft;
-    private float lastDash = -100f;
+    private float timeSinceDash;
 
     private int direction;
 
@@ -93,11 +93,17 @@ public class PlayerController : MonoBehaviour
     private bool isSprint = false;
     private bool isDash = false;
 
+    
+    public int availableDashes;
+
+    private int remainingDashes;
+
 
 
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
+        remainingDashes = availableDashes;
     }
 
     // Update is called for Physics based actions
@@ -184,7 +190,12 @@ public class PlayerController : MonoBehaviour
             isJump = false;
         }
 
-        if (Input.GetButtonDown("Dash")) {
+        if (isGrounded) {
+            remainingDashes = availableDashes;
+        }
+
+        if (Input.GetButtonDown("Dash") && timeSinceDash <= 0 && remainingDashes > 0) {
+            remainingDashes--;
             isDash = !isDash;
         }
 
@@ -200,12 +211,13 @@ public class PlayerController : MonoBehaviour
         }
 
         if (isDashing) {
-            rb.velocity = new Vector2(speed * dashSpeed * direction, 0);
+            rb.velocity = new Vector2(speed * dashSpeed * Input.GetAxisRaw("Horizontal"), 0);
 
             dashTimeLeft -= Time.deltaTime;
 
             if (dashTimeLeft <= 0) {
                 isDashing = false;
+                timeSinceDash = dashCoolDown;
             }
 
             
@@ -216,34 +228,10 @@ public class PlayerController : MonoBehaviour
         }
 
         //CheckDash();
-        
+        timeSinceDash -= Time.deltaTime;
 
     }
 
-    private void AttemptToDash() {
-        isDashing = true;
-        dashTimeLeft = dashTime;
-        lastDash = Time.time;
-    }
-
-    private void CheckDash() {
-        if (isDashing) {
-            if (dashTimeLeft > 0) {
-                //canMove = false;
-                //canFlip = false;
-                //rb.velocity = new Vector2((speed + dashSpeed) * direction, 0);
-                rb.AddForce(new Vector2(dashSpeed, 0f), ForceMode2D.Force);
-                Debug.Log(rb.velocity.x);
-                dashTimeLeft -= Time.deltaTime;
-            }
-        }
-
-        if (dashTimeLeft <= 0) { //|| isTouchingWall
-            isDashing = false;
-            //canMove = true;
-            //canFlip = true;
-        }
-    }
 
     void applyMovement()
     {

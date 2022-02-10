@@ -704,9 +704,10 @@ MonoBehaviour:
   animator: {fileID: 377048908}
   isDead: 0
   player: {fileID: 111063579}
-  dashTime: 0.25
+  dashTime: 0.2
   dashSpeed: 2
-  dashCoolDown: 1
+  dashCoolDown: 0.5
+  availableDashes: 1
 --- !u!50 &377048906
 Rigidbody2D:
   serializedVersion: 4
@@ -17624,6 +17625,7 @@ GameObject:
   - component: {fileID: 2029079087}
   - component: {fileID: 2029079088}
   - component: {fileID: 2029079089}
+  - component: {fileID: 2029079090}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: Untagged
@@ -17833,8 +17835,41 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   source: {fileID: 2029079088}
-  clip: {fileID: 8300000, guid: 1689c6f0f6bf535469e08fea66185d7f, type: 3}
+  clip: {fileID: 8300000, guid: 2bb9acf4a746413478445f73b52470a9, type: 3}
   player: {fileID: 377048905}
+--- !u!114 &2029079090
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2029079083}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a79441f348de89743a2939f4d699eac1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_RenderShadows: 1
+  m_RequiresDepthTextureOption: 2
+  m_RequiresOpaqueTextureOption: 2
+  m_CameraType: 0
+  m_Cameras: []
+  m_RendererIndex: -1
+  m_VolumeLayerMask:
+    serializedVersion: 2
+    m_Bits: 1
+  m_VolumeTrigger: {fileID: 0}
+  m_VolumeFrameworkUpdateModeOption: 2
+  m_RenderPostProcessing: 0
+  m_Antialiasing: 0
+  m_AntialiasingQuality: 2
+  m_StopNaN: 0
+  m_Dithering: 0
+  m_ClearDepth: 1
+  m_AllowXRRendering: 1
+  m_RequiresDepthTexture: 0
+  m_RequiresColorTexture: 0
+  m_Version: 2
 --- !u!1001 &2116997534
 PrefabInstance:
   m_ObjectHideFlags: 0
